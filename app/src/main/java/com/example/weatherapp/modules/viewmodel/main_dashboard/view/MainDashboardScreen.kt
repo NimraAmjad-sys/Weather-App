@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui.viewmodel.locations.view
+package com.example.weatherapp.modules.viewmodel.main_dashboard.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -24,14 +24,14 @@ fun LocationsScreen(onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text("London", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                    }
-                },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                title = {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Text("London", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     }
                 },
                 actions = {

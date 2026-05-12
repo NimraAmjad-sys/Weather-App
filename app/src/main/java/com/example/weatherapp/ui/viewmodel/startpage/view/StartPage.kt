@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui.startpage
+package com.example.weatherapp.ui.viewmodel.startpage.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.modules.viewmodel.startpage.view.StartPage
 
 @Composable
 fun StartPage(onGetStartedClick: () -> Unit) {

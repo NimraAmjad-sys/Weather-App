@@ -1,4 +1,4 @@
-package com.example.weatherapp.ui.viewmodel.startpage.view
+package com.example.weatherapp.modules.viewmodel.startpage.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,49 +20,54 @@ fun StartPage(onGetStartedClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF81D4FA)) // Light blue background matching the image
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color(0xFF81D4FA), Color(0xFF4FC3F7))
+                )
+            )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1.2f))
 
-            // Weather Icon Container (Rounded Square with Gradient)
-            Card(
-                modifier = Modifier.size(180.dp),
-                shape = RoundedCornerShape(48.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            // Professional-Looking Weather Logo
+            Surface(
+                modifier = Modifier.size(200.dp),
+                shape = RoundedCornerShape(56.dp),
+                color = Color.White.copy(alpha = 0.2f),
+                shadowElevation = 0.dp
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(Color(0xFF448AFF), Color(0xFF1565C0))
-                            )
-                        ),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("☀️", fontSize = 60.sp)
-                        Text("☁️", fontSize = 90.sp, modifier = Modifier.offset(y = (-35).dp))
-                    }
+                    // Layered Sun and Cloud
+                    Text("☀️", fontSize = 80.sp, modifier = Modifier.offset(x = (-30).dp, y = (-20).dp))
+                    Text("☁️", fontSize = 110.sp, modifier = Modifier.offset(y = 20.dp))
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
             Text(
                 text = "Weather\nForeCasts",
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 48.sp,
+                fontWeight = FontWeight.ExtraBold,
                 color = Color.White,
                 textAlign = TextAlign.Center,
-                lineHeight = 48.sp
+                lineHeight = 54.sp,
+                letterSpacing = (-1).sp
+            )
+            
+            Text(
+                text = "Accurate updates for every city",
+                fontSize = 16.sp,
+                color = Color.White.copy(alpha = 0.9f),
+                modifier = Modifier.padding(top = 8.dp)
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -70,20 +75,23 @@ fun StartPage(onGetStartedClick: () -> Unit) {
             Button(
                 onClick = onGetStartedClick,
                 modifier = Modifier
-                    .fillMaxWidth(0.85f)
+                    .fillMaxWidth()
                     .height(64.dp),
-                shape = RoundedCornerShape(32.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0D47A1))
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFFD54F), // Yellow for visibility
+                    contentColor = Color(0xFF003D7C)
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
             ) {
                 Text(
                     text = "Get Started",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
             
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
