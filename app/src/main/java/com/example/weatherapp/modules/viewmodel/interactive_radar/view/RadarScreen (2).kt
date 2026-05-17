@@ -1,7 +1,6 @@
 package com.example.weatherapp.modules.viewmodel.interactive_radar.view
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,15 +15,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,8 +35,8 @@ fun RadarScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Search",
-                        fontWeight = FontWeight.Bold,
+                        "Interactive Radar",
+                        fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp
                     )
                 },
@@ -49,7 +46,7 @@ fun RadarScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             )
         }
@@ -58,7 +55,7 @@ fun RadarScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             // Search Bar
             Surface(
@@ -66,7 +63,7 @@ fun RadarScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 10.dp),
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFFF1F3F5)
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
             ) {
                 Row(
                     modifier = Modifier
@@ -79,9 +76,10 @@ fun RadarScreen(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
                         modifier = Modifier.weight(1f),
+                        textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
                         decorationBox = { innerTextField ->
                             if (searchQuery.isEmpty()) {
-                                Text("Search", color = Color.Gray)
+                                Text("Search for Lahore area...", color = Color.Gray)
                             }
                             innerTextField()
                         }
@@ -90,93 +88,112 @@ fun RadarScreen(
                 }
             }
 
-            // Map Area with Radar Overlay
+            // Large Map Area with Radar Overlay
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(Color(0xFFE1F5FE)) // Map-like base color
             ) {
-                // Placeholder Map Image
-                Image(
-                    painter = painterResource(id = R.drawable.cloud_bg_png), // Using existing cloud bg as placeholder for map
-                    contentDescription = "Map Placeholder",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                    alpha = 0.5f
-                )
-
-                // Simulated Map Lines (to make it look like a map)
+                // Map/Graph Grid Visual
                 Canvas(modifier = Modifier.fillMaxSize()) {
-                    // Draw a grid or some lines to simulate a map
+                    val gridColor = Color.LightGray.copy(alpha = 0.6f)
+                    val spacing = 50.dp.toPx()
+                    
+                    // Draw Vertical Lines
+                    for (x in 0 until (size.width / spacing).toInt() + 1) {
+                        drawLine(gridColor, start = Offset(x * spacing, 0f), end = Offset(x * spacing, size.height), strokeWidth = 1f)
+                    }
+                    // Draw Horizontal Lines
+                    for (y in 0 until (size.height / spacing).toInt() + 1) {
+                        drawLine(gridColor, start = Offset(0f, y * spacing), end = Offset(size.width, y * spacing), strokeWidth = 1f)
+                    }
                 }
 
-                // Radar Circle Overlay
+                // Radar Circles & Lahore Highlight
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Canvas(modifier = Modifier.size(300.dp)) {
+                    Canvas(modifier = Modifier.size(320.dp)) {
                         drawCircle(
-                            color = Color(0xFF3B82F6).copy(alpha = 0.2f),
+                            color = Color(0xFF1E88E5).copy(alpha = 0.1f),
                             radius = size.minDimension / 2
                         )
                         drawCircle(
-                            color = Color(0xFF3B82F6),
+                            color = Color(0xFF1E88E5).copy(alpha = 0.3f),
                             radius = size.minDimension / 2,
                             style = Stroke(width = 2.dp.toPx())
                         )
                     }
                     
-                    // Central Marker
-                    Icon(
-                        Icons.Default.LocationOn,
-                        contentDescription = null,
-                        tint = Color(0xFF3B82F6),
-                        modifier = Modifier.size(32.dp).offset(y = (-16).dp)
-                    )
-                    
-                    Text(
-                        "New York",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.offset(y = 10.dp)
-                    )
+                    // HIGHLIGHT LAHORE
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            Icons.Default.LocationOn,
+                            contentDescription = null,
+                            tint = Color(0xFFD32F2F), // Bold red for highlight
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Text(
+                            "Lahore",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Black,
+                            fontSize = 22.sp,
+                            modifier = Modifier
+                                .background(Color.White.copy(alpha = 0.8f), RoundedCornerShape(8.dp))
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        )
+                    }
                 }
 
-                // Additional simulated markers
+                // Additional simulated markers near Lahore
                 Marker(Modifier.align(Alignment.Center).offset(x = 60.dp, y = 40.dp))
-                Marker(Modifier.align(Alignment.Center).offset(x = 50.dp, y = 70.dp))
-                Marker(Modifier.align(Alignment.Center).offset(x = 80.dp, y = 60.dp))
+                Marker(Modifier.align(Alignment.Center).offset(x = (-50).dp, y = 70.dp))
             }
 
-            // Bottom Info Card
+            // Bottom Info Card (Lahore)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                 shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(24.dp)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text("Park Slope", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Icon(Icons.Default.LocationOn, null, tint = Color(0xFF1E88E5), modifier = Modifier.size(20.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                "Lahore City",
+                                fontWeight = FontWeight.Black,
+                                fontSize = 18.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                         }
-                        Text("Paris, London", color = Color.Gray, fontSize = 14.sp)
+                        Text(
+                            "Punjab, Pakistan",
+                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            modifier = Modifier.padding(start = 28.dp)
+                        )
                     }
-                    Text("72°", fontSize = 36.sp, fontWeight = FontWeight.Light)
+                    Text(
+                        "28°",
+                        fontSize = 42.sp,
+                        fontWeight = FontWeight.ExtraLight,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }
@@ -188,23 +205,24 @@ fun Marker(modifier: Modifier = Modifier) {
     Icon(
         Icons.Default.LocationOn,
         contentDescription = null,
-        tint = Color(0xFF5A9FFF),
-        modifier = modifier.size(24.dp)
+        tint = Color(0xFF1E88E5).copy(alpha = 0.6f),
+        modifier = modifier.size(28.dp)
     )
 }
 
-// BasicTextField helper since I don't want to import full foundation text for now if possible
 @Composable
 fun BasicTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    textStyle: androidx.compose.ui.text.TextStyle = LocalTextStyle.current,
     decorationBox: @Composable (@Composable () -> Unit) -> Unit
 ) {
     androidx.compose.foundation.text.BasicTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
+        textStyle = textStyle,
         decorationBox = decorationBox
     )
 }

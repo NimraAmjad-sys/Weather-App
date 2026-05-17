@@ -1,5 +1,6 @@
 package com.example.weatherapp.modules.viewmodel.weekly_forecast.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -46,14 +47,14 @@ fun WeeklyForecastScreen(
                             text = cityName.uppercase(),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1E88E5), // Professional Blue
-                            letterSpacing = 1.sp
+                            color = MaterialTheme.colorScheme.primary,
+                            letterSpacing = 1.5.sp
                         )
                         Text(
                             text = "7-Day Forecast",
-                            fontWeight = FontWeight.ExtraBold,
+                            fontWeight = FontWeight.Black,
                             fontSize = 22.sp,
-                            color = Color(0xFF212121)
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -62,35 +63,38 @@ fun WeeklyForecastScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 modifier = Modifier.statusBarsPadding()
             )
-        },
-        containerColor = Color(0xFFF8F9FD) 
+        }
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(padding)
+        ) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = Color(0xFF5A9FFF)
+                    color = MaterialTheme.colorScheme.primary
                 )
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 24.dp)
+                    contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 100.dp)
                 ) {
                     items(weeklyData) { item ->
                         DailyForecastRow(item)
                     }
-                    // Bottom Spacer to ensure full visibility of the last card
-                    item { Spacer(modifier = Modifier.height(32.dp)) }
                 }
             }
         }
@@ -102,8 +106,8 @@ fun DailyForecastRow(item: DailyForecastItem) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        color = Color.White,
-        shadowElevation = 2.dp
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        shadowElevation = 0.dp
     ) {
         Row(
             modifier = Modifier
@@ -112,19 +116,19 @@ fun DailyForecastRow(item: DailyForecastItem) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Day and Date - High Visibility
+            // Day and Date - High visibility
             Column(modifier = Modifier.width(110.dp)) {
                 Text(
                     text = item.day,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontWeight = FontWeight.Black,
                     fontSize = 18.sp,
-                    color = Color(0xFF212121)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = item.date,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Gray
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
 
@@ -132,8 +136,8 @@ fun DailyForecastRow(item: DailyForecastItem) {
             Icon(
                 imageVector = if (item.weatherCode < 3) Icons.Default.WbSunny else Icons.Default.Cloud,
                 contentDescription = null,
-                tint = if (item.weatherCode < 3) Color(0xFFFFD54F) else Color(0xFF81D4FA),
-                modifier = Modifier.size(36.dp)
+                tint = if (item.weatherCode < 3) Color(0xFFFFC107) else Color(0xFF81D4FA),
+                modifier = Modifier.size(40.dp)
             )
 
             // Probability & Temperature
@@ -142,22 +146,22 @@ fun DailyForecastRow(item: DailyForecastItem) {
                     Text(
                         text = "${item.precipitation}%",
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Black,
                         color = Color(0xFF4FC3F7),
                         modifier = Modifier.padding(end = 12.dp)
                     )
                 }
                 Text(
                     text = "${item.maxTemp}°",
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 18.sp,
-                    color = Color.Black
+                    fontWeight = FontWeight.Black,
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = " / ${item.minTemp}°",
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.ExtraBold,
                     fontSize = 16.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
             }
         }

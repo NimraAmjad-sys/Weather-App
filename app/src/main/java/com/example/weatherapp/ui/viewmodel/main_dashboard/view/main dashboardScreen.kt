@@ -36,23 +36,16 @@ fun LocationsScreen(
             TopAppBar(
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text("Weather Dash", fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = Color(0xFF1A1C1E))
+                        Text("Weather Dash", fontWeight = FontWeight.Black, fontSize = 22.sp, color = MaterialTheme.colorScheme.onSurface)
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onSurface)
                     }
                 },
-                actions = {
-                    IconButton(onClick = onSettingClick) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings", tint = Color.Black)
-                    }
-                    IconButton(onClick = onSearchClick) {
-                        Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Black)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                // ACTIONS REMOVED (Search/Settings buttons gone from top)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         },
         bottomBar = {
@@ -64,7 +57,7 @@ fun LocationsScreen(
                 onSettingClick = onSettingClick
             )
         },
-        containerColor = Color(0xFFF8F9FD)
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -76,39 +69,40 @@ fun LocationsScreen(
             item { Spacer(modifier = Modifier.height(10.dp)) }
             
             item {
-                // Main Weather Card - Premium Design
+                // Main Weather Card - Defaulted to Lahore
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
-                        .clickable { onLocationClick("London", 51.5074, 0.1278) },
+                        .clickable { onLocationClick("Lahore", 31.5204, 74.3587) },
                     shape = RoundedCornerShape(32.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(
                                 brush = Brush.linearGradient(
-                                    colors = listOf(Color(0xFF4FC3F7), Color(0xFF1976D2))
+                                    colors = listOf(Color(0xFF1E88E5), Color(0xFF4FC3F7))
                                 )
                             )
                             .padding(24.dp)
                     ) {
                         Column {
-                            Text("London, UK", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                            Text("Partly Cloudy", color = Color.White.copy(alpha = 0.8f), fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+                            Text("Lahore, Pakistan", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Black)
+                            Text("Mostly Clear", color = Color.White.copy(alpha = 0.8f), fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
                             Spacer(modifier = Modifier.weight(1f))
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("32°", color = Color.White, fontSize = 56.sp, fontWeight = FontWeight.Light)
+                                Text("28°", color = Color.White, fontSize = 64.sp, fontWeight = FontWeight.Light)
                                 Spacer(modifier = Modifier.width(16.dp))
                                 Column {
-                                    Text("H: 34° L: 28°", color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
-                                    Text("Feels like 31°", color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
+                                    Text("H: 30° L: 22°", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                    Text("Feels like 29°", color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
                                 }
                             }
                         }
-                        Text("☀️", fontSize = 70.sp, modifier = Modifier.align(Alignment.TopEnd))
+                        Text("☀️", fontSize = 80.sp, modifier = Modifier.align(Alignment.TopEnd))
                     }
                 }
             }
@@ -133,26 +127,26 @@ fun LocationsScreen(
             }
 
             item {
-                // News Section - Modern Style
-                Text("Weather Insights", fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = Color.Black)
+                // News/Alert Section
+                Text("Weather Alerts", fontWeight = FontWeight.Black, fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground)
                 Spacer(modifier = Modifier.height(8.dp))
                 Surface(
                     modifier = Modifier.fillMaxWidth().clickable { onWarningClick() },
                     shape = RoundedCornerShape(24.dp),
-                    color = Color.White,
-                    shadowElevation = 2.dp
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                         Box(
-                            modifier = Modifier.size(60.dp).background(Color(0xFFFFF3E0), RoundedCornerShape(16.dp)),
+                            modifier = Modifier.size(56.dp).background(Color(0xFFFFF3E0), RoundedCornerShape(16.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(Icons.Default.Warning, contentDescription = null, tint = Color(0xFFFF9800))
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
-                            Text("Severe Warning", fontWeight = FontWeight.Bold, color = Color.Black)
-                            Text("Storm approaching in 15 mins", color = Color.Gray, fontSize = 14.sp)
+                            Text("Severe Warning", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onSurface)
+                            Text("Storm approaching Lahore area", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f), fontSize = 14.sp)
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(Icons.Default.ChevronRight, contentDescription = null, tint = Color.LightGray)
@@ -160,7 +154,7 @@ fun LocationsScreen(
                 }
             }
 
-            item { Spacer(modifier = Modifier.height(20.dp)) }
+            item { Spacer(modifier = Modifier.height(30.dp)) }
         }
     }
 }
@@ -168,30 +162,72 @@ fun LocationsScreen(
 @Composable
 fun DashboardActionCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, color: Color, modifier: Modifier, onClick: () -> Unit) {
     Surface(
-        modifier = modifier.height(100.dp).clickable { onClick() },
-        shape = RoundedCornerShape(24.dp),
-        color = Color.White,
-        shadowElevation = 1.dp
+        modifier = modifier.height(110.dp).clickable { onClick() },
+        shape = RoundedCornerShape(28.dp),
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 2.dp
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(32.dp))
+            Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(36.dp))
             Spacer(modifier = Modifier.height(8.dp))
-            Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
+            Text(title, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
 
 @Composable
-fun BottomNavigationBar(onHomeClick: () -> Unit, onRadarClick: () -> Unit, onAirQualityClick: () -> Unit, onSearchClick: () -> Unit, onSettingClick: () -> Unit) {
-    NavigationBar(containerColor = Color.White, tonalElevation = 0.dp) {
-        NavigationBarItem(icon = { Icon(Icons.Default.Home, null) }, selected = true, onClick = onHomeClick)
-        NavigationBarItem(icon = { Icon(Icons.Default.Map, null) }, selected = false, onClick = onRadarClick)
-        NavigationBarItem(icon = { Icon(Icons.Default.BarChart, null) }, selected = false, onClick = onAirQualityClick)
-        NavigationBarItem(icon = { Icon(Icons.Default.Search, null) }, selected = false, onClick = onSearchClick)
-        NavigationBarItem(icon = { Icon(Icons.Default.Settings, null) }, selected = false, onClick = onSettingClick)
+fun BottomNavigationBar(
+    onHomeClick: () -> Unit,
+    onRadarClick: () -> Unit,
+    onAirQualityClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onSettingClick: () -> Unit
+) {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 0.dp) {
+        NavigationBarItem(
+            selected = true,
+            onClick = onHomeClick,
+            icon = { Icon(Icons.Default.Home, contentDescription = "Home", tint = Color.DarkGray) },
+            colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = onRadarClick,
+            icon = { Icon(Icons.Default.Map, contentDescription = "Radar", tint = Color.DarkGray) }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = onAirQualityClick,
+            icon = { Icon(Icons.Default.BarChart, contentDescription = "Air Quality", tint = Color.DarkGray) }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = onSearchClick,
+            icon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.DarkGray) }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = onSettingClick,
+            icon = { Icon(Icons.Default.Settings, contentDescription = "Settings", tint = Color.DarkGray) }
+        )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LocationsScreenPreview() {
+    LocationsScreen(
+        onBackClick = {},
+        onSearchClick = {},
+        onAirQualityClick = {},
+        onWarningClick = {},
+        onSettingClick = {},
+        onRadarClick = {},
+        onCompareClick = {},
+        onLocationClick = { _, _, _ -> }
+    )
 }
